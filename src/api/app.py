@@ -26,7 +26,9 @@ def create_app() -> FastAPI:
 def create_health_route():
     # Add Health Checks
     health_checks = HealthCheckFactory()
-    app.add_api_route("/health", endpoint=healthCheckRoute(factory=health_checks))
+    app.add_api_route(
+        "/health", endpoint=healthCheckRoute(factory=health_checks)
+    )
 
 
 app = create_app()
