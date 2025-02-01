@@ -56,7 +56,7 @@ jobs:
         with:
           args: >
             -Dsonar.organization=rafabernardo
-            -Dsonar.projectKey=ftc-product-service
+            -Dsonar.projectKey=rafabernardo_ftc-product-service
             -Dsonar.python.coverage.reportPaths=coverage.xml
             -Dsonar.tests=tests/
             -Dsonar.test.exclusions=tests/**
