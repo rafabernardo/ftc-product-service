@@ -33,6 +33,7 @@ ruff = "^0.5.4"
 black = "^24.4.2"
 isort = "^5.13.2"
 pylint = "^3.1.0"
+pre-commit = "^4.1.0"
 
 [build-system]
 requires = ["poetry-core"]
@@ -81,6 +82,7 @@ ignore = [
 disable = "C0111,C0103"
 ignore = "CVS"
 persistent = "yes"
+init-hook='import sys; sys.path.append("src")'
 
 [tool.pylint.FORMAT]
 max-line-length = 79

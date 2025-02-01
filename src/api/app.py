@@ -1,7 +1,8 @@
-from core.dependency_injection import Container
-from core.settings import get_settings
 from fastapi import FastAPI
 from fastapi_healthcheck import HealthCheckFactory, healthCheckRoute
+
+from core.dependency_injection import Container
+from core.settings import get_settings
 
 settings = get_settings()
 print(settings.API_PORT)
