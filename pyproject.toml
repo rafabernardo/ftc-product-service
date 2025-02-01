@@ -29,8 +29,9 @@ uvicorn = "^0.30.3"
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3"
 ruff = "^0.5.4"
-black = "24.4.2"
-isort = "5.13.2"
+black = "^24.4.2"
+isort = "^5.13.2"
+pylint = "^3.1.0"
 
 [build-system]
 requires = ["poetry-core"]
@@ -42,7 +43,7 @@ in-project = true
 
 [tool.black]
 line-length = 79
-target-version = ['py38']
+target-version = ["py311"]
 
 [tool.isort]
 atomic = true
@@ -50,4 +51,43 @@ profile = "black"
 line_length = 79
 skip_gitignore = true
 skip_glob = ["tests/data", "profiling"]
-known_first_party = ["black", "blib2to3", "blackd", "_black_version"]
+known_first_party = ["core", "models", "api", "db", "repositories", "services"]
+
+[tool.ruff]
+line-length = 79
+target-version = "py311"
+exclude = [
+  "tests/data",  # Exclude test data
+  "profiling",   # Exclude profiling files
+]
+
+[tool.ruff.lint]
+select = [
+  "E",   # Pycodestyle errors
+  "F",   # Pyflakes
+  "W",   # Pycodestyle warnings
+  "I",   # Isort (import sorting)
+  "C90", # McCabe complexity
+  "B",   # Bugbear
+  "UP",  # Pyupgrade
+  "YTT", # flake8-2020
+]
+ignore = [
+  "E203", # Whitespace before ':' (conflicts with black)
+]
+
+[tool.pylint.MASTER]
+disable = "C0111,C0103"
+ignore = "CVS"
+persistent = "yes"
+
+[tool.pylint.FORMAT]
+max-line-length = 79
+max-module-lines = 1000
+
+[tool.pylint.MESSAGES_CONTROL]
+disable = [
+  "wrong-import-order",
+  "c-extension-no-member",  # Disable the check for C extensions
+  "W0311,W0603,R0903,C0111,C0103",  # Other disabled checks
+]

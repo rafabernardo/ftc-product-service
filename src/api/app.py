@@ -1,8 +1,7 @@
-from fastapi import FastAPI
-from fastapi_healthcheck import HealthCheckFactory, healthCheckRoute
-
 from core.dependency_injection import Container
 from core.settings import get_settings
+from fastapi import FastAPI
+from fastapi_healthcheck import HealthCheckFactory, healthCheckRoute
 
 settings = get_settings()
 print(settings.API_PORT)
@@ -26,7 +25,9 @@ def create_app() -> FastAPI:
 def create_health_route():
     # Add Health Checks
     health_checks = HealthCheckFactory()
-    app.add_api_route("/health", endpoint=healthCheckRoute(factory=health_checks))
+    app.add_api_route(
+        "/health", endpoint=healthCheckRoute(factory=health_checks)
+    )
 
 
 app = create_app()
