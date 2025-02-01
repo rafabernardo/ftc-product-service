@@ -8,12 +8,13 @@ authors = [
 ]
 readme = "README.md"
 packages = [
-    { include = "core", from = "src"},
-    { include = "models", from = "src"},
     { include = "api", from = "src"},
-    { include = "db", from = "src"},
-    { include = "repositories", from = "src"},
-    { include = "services", from = "src"},
+    { include = "core", from = "src"},
+    { include = "external", from = "src"},
+    { include = "gateways", from = "src"},
+    { include = "interfaces", from = "src"},
+    { include = "models", from = "src"},
+    { include = "use_cases", from = "src"},
 ]
 
 [tool.poetry.dependencies]
