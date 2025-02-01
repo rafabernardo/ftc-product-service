@@ -54,7 +54,6 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Required for PR decoration
         with:
-          projectBaseDir: ftc-product-service/src
           args: >
             -Dsonar.organization=rafabernardo
             -Dsonar.projectKey=ftc-product-service
