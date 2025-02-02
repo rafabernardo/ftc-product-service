@@ -9,6 +9,7 @@ authors = [
 readme = "README.md"
 packages = [
     { include = "api", from = "src"},
+    { include = "controllers", from = "src"},
     { include = "core", from = "src"},
     { include = "external", from = "src"},
     { include = "gateways", from = "src"},
@@ -54,7 +55,6 @@ profile = "black"
 line_length = 79
 skip_gitignore = true
 skip_glob = ["tests/data", "profiling"]
-known_first_party = ["core", "models", "api", "db", "repositories", "services"]
 
 [tool.ruff]
 line-length = 79

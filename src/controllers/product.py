@@ -1,4 +1,3 @@
-from adapters.models.page import Page
 from adapters.models.product import (
     PagedProductsOut,
     ProductIn,
@@ -6,22 +5,25 @@ from adapters.models.product import (
     ProductUpdateIn,
 )
 from adapters.product import ProductAdapter
-from models.product import Category, Product
+from models.product import Category
 from use_cases.product import ProductUseCases
 
 
 class ProductController:
+    @staticmethod
     def pagineted_products(
-        self, page: int, page_size: int, category: Category
+        page: int,
+        page_size: int,
+        category: Category,
     ) -> PagedProductsOut:
         filters = {}
         if category:
             filters["category"] = category.value
 
-        products = ProductUseCases.list_products(
+        products = ProductUseCases().list_products(
             filters=filters, page=page, page_size=page_size
         )
-        total_products = ProductUseCases.get_total_products(filters=filters)
+        total_products = ProductUseCases().get_total_products(filters=filters)
 
         pagineted_products = ProductAdapter.adapt_pagineted_products(
             products=products,
@@ -32,14 +34,18 @@ class ProductController:
 
         return pagineted_products
 
-    def get_product_by_id(id: int) -> ProductOut:
+    @staticmethod
+    def get_product_by_id(product_id: int) -> ProductOut:
         pass
 
+    @staticmethod
     def create_product(product: ProductIn) -> ProductOut:
         pass
 
+    @staticmethod
     def update_product(product: ProductUpdateIn) -> ProductOut:
         pass
 
-    def delete_product(id: int) -> None:
+    @staticmethod
+    def delete_product(product_id: int) -> None:
         pass

@@ -4,13 +4,19 @@ from models.product import Product
 
 
 class ProductAdapter:
+    @staticmethod
     def adapt_pagineted_products(
-        self, products: list[Product], total_products: int, page: int, page_size: int
+        products: list[Product],
+        total_products: int,
+        page: int,
+        page_size: int,
     ):
-        pagination_info = self.get_pagination_info(
+        pagination_info = ProductAdapter.get_pagination_info(
             total_results=total_products, page=page, page_size=page_size
         )
-        listed_products = [ProductOut(**product.model_dump()) for product in products]
+        listed_products = [
+            ProductOut(**product.model_dump()) for product in products
+        ]
 
         pagineted_products = PagedProductsOut(
             **pagination_info.model_dump(), results=listed_products
@@ -18,7 +24,9 @@ class ProductAdapter:
         return pagineted_products
 
     @staticmethod
-    def get_pagination_info(total_results=int, page=int, page_size=int) -> Page:
+    def get_pagination_info(
+        total_results=int, page=int, page_size=int
+    ) -> Page:
         total_pages = (total_results + page_size - 1) // page_size
         has_next = page < total_pages
         has_previous = page > 1

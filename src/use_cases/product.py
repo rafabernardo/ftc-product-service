@@ -1,15 +1,22 @@
-from adapters.models.page import Page
-from adapters.models.product import PagedProductsOut, ProductOut
-from interfaces.database.product import ProductsDatabaseInterface
+from dependency_injector.wiring import Provide, inject
+
 from interfaces.gateaway import ProductsGatewayInterface
-from models.product import Category, Product
+from models.product import Product
 
 
 class ProductUseCases:
-    def __init__(self, product_gateway: ProductsGatewayInterface):
+    @inject
+    def __init__(
+        self,
+        product_gateway: ProductsGatewayInterface = Provide[
+            ProductsGatewayInterface
+        ],
+    ):
         self.product_gateway: ProductsGatewayInterface = product_gateway
 
-    def list_products(self, filters: dict, page: int, page_size: int) -> list[Product]:
+    def list_products(
+        self, filters: dict, page: int, page_size: int
+    ) -> list[Product]:
         products = self.product_gateway.list_products(
             filters=filters,
             page=page,

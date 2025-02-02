@@ -1,25 +1,10 @@
 from datetime import datetime
 
 from adapters.models.page import Page
-from models.product import Category
-from pydantic import BaseModel, field_validator
+from models.product import BaseProduct
 
 
-class ProductIn(BaseModel):
-    name: str
-    category: str
-    price: int
-    description: str
-    image: str
-
-    @field_validator("category")
-    @classmethod
-    def validate_category(cls, v: str):
-        try:
-            Category(v)
-            return v
-        except ValueError:
-            raise ValueError(f"Invalid category value: {v}")
+class ProductIn(BaseProduct): ...
 
 
 class ProductUpdateIn(ProductIn):

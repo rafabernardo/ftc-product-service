@@ -3,7 +3,8 @@ import abc
 from models.product import Product
 
 
-class ProductsRepositoryInterface(abc.ABC):
+class ProductsDatabaseInterface(abc.ABC):
+    @abc.abstractmethod
     def __init__(self): ...
 
     @abc.abstractmethod
@@ -11,25 +12,27 @@ class ProductsRepositoryInterface(abc.ABC):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def get_by_id(self, id: int) -> Product | None:
+    def get_by_id(self, product_id: int) -> Product | None:
         raise NotImplementedError
 
     @abc.abstractmethod
-    def list_products(self, filter: dict, page: int, page_size: int) -> list[Product]:
+    def list_products(
+        self, filters: dict, page: int, page_size: int
+    ) -> list[Product]:
         raise NotImplementedError
 
     @abc.abstractmethod
-    def count_products(self, filter: dict) -> int:
+    def count_products(self, filters: dict) -> int:
         raise NotImplementedError
 
     @abc.abstractmethod
-    def delete_product(self, id: int) -> bool:
+    def delete_product(self, product_id: int) -> bool:
         raise NotImplementedError
 
     @abc.abstractmethod
-    def exists_by_id(self, id: int) -> bool:
+    def exists_by_id(self, product_id: int) -> bool:
         raise NotImplementedError
 
     @abc.abstractmethod
-    def update_product(self, id: int, **kwargs) -> Product:
+    def update_product(self, product_id: int, **kwargs) -> Product:
         raise NotImplementedError

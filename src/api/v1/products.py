@@ -1,19 +1,12 @@
 import traceback
 
-from adapters.models.product import (
-    PagedProductsOut,
-    ProductIn,
-    ProductOut,
-    ProductUpdateIn,
-)
-from api.v1.exceptions.commons import (
-    InternalServerErrorHTTPException,
-    NoDocumentsFoundHTTPException,
-)
+from dependency_injector.wiring import inject
+from fastapi import APIRouter, Query, Response, status
+
+from adapters.models.product import PagedProductsOut
+from api.v1.exceptions.commons import InternalServerErrorHTTPException
 from controllers.product import ProductController
-from dependency_injector.wiring import Provide, inject
-from fastapi import APIRouter, Depends, Query, Response, status
-from models.product import Category, Product
+from models.product import Category
 
 HEADER_CONTENT_TYPE = "content-type"
 HEADER_CONTENT_TYPE_APPLICATION_JSON = "application/json"
@@ -27,18 +20,22 @@ def pagineted_products(
     response: Response,
     page: int = Query(default=1, gt=0),
     page_size: int = Query(default=10, gt=0, le=100),
-    category: Category = Query(None),
+    category: Category = Query(None),  # noqa: B008
 ):
     try:
-        paged_products = ProductController.pagineted_products(page, page_size, category)
+        paged_products = ProductController.pagineted_products(
+            page, page_size, category
+        )
 
         response.status_code = status.HTTP_200_OK
-        response.headers[HEADER_CONTENT_TYPE] = HEADER_CONTENT_TYPE_APPLICATION_JSON
+        response.headers[HEADER_CONTENT_TYPE] = (
+            HEADER_CONTENT_TYPE_APPLICATION_JSON
+        )
 
         return paged_products
-    except Exception:
+    except Exception as e:
         print(traceback.format_exc())
-        raise InternalServerErrorHTTPException()
+        raise InternalServerErrorHTTPException() from e
 
 
 # @router.get("/{id}", response_model=ProductV1Response)
@@ -46,7 +43,9 @@ def pagineted_products(
 # async def get_product_by_id(
 #     id: int,
 #     response: Response,
-#     product_service: ProductService = Depends(Provide[Container.product_service]),
+#     product_service: ProductService = Depends(
+#         Provide[Container.product_service]
+#     ),
 # ):
 #     try:
 #         product = product_service.get_product_by_id(id)
@@ -57,7 +56,9 @@ def pagineted_products(
 #     if not product:
 #         raise NoDocumentsFoundHTTPException()
 #     response.status_code = status.HTTP_200_OK
-#     response.headers[HEADER_CONTENT_TYPE] = HEADER_CONTENT_TYPE_APPLICATION_JSON
+#     response.headers[HEADER_CONTENT_TYPE] = (
+#         HEADER_CONTENT_TYPE_APPLICATION_JSON
+#     )
 
 #     return product
 
@@ -67,7 +68,9 @@ def pagineted_products(
 # async def register(
 #     create_product_request: ProductV1Request,
 #     response: Response,
-#     product_service: ProductService = Depends(Provide[Container.product_service]),
+#     product_service: ProductService = Depends(
+#         Provide[Container.product_service]
+#     ),
 # ):
 #     try:
 #         product = Product(**create_product_request.model_dump())
@@ -77,7 +80,9 @@ def pagineted_products(
 #         raise InternalServerErrorHTTPException()
 
 #     response.status_code = status.HTTP_201_CREATED
-#     response.headers[HEADER_CONTENT_TYPE] = HEADER_CONTENT_TYPE_APPLICATION_JSON
+#     response.headers[HEADER_CONTENT_TYPE] = (
+#         HEADER_CONTENT_TYPE_APPLICATION_JSON
+#     )
 
 #     return product
 
@@ -87,7 +92,9 @@ def pagineted_products(
 # async def delete(
 #     id: int,
 #     response: Response,
-#     product_service: ProductService = Depends(Provide[Container.product_service]),
+#     product_service: ProductService = Depends(
+#         Provide[Container.product_service]
+#     ),
 # ):
 #     try:
 #         was_product_deleted = product_service.delete_product(id)
@@ -101,7 +108,9 @@ def pagineted_products(
 #         raise InternalServerErrorHTTPException()
 
 #     response.status_code = status.HTTP_204_NO_CONTENT
-#     response.headers[HEADER_CONTENT_TYPE] = HEADER_CONTENT_TYPE_APPLICATION_JSON
+#     response.headers[HEADER_CONTENT_TYPE] = (
+#         HEADER_CONTENT_TYPE_APPLICATION_JSON
+#     )
 
 
 # @router.patch("/{id}", response_model=ProductV1Response)
@@ -110,14 +119,19 @@ def pagineted_products(
 #     id: int,
 #     product_request: ProductPatchV1Request,
 #     response: Response,
-#     product_service: ProductService = Depends(Provide[Container.product_service]),
+#     product_service: ProductService = Depends(
+#         Provide[Container.product_service]
+#     ),
 # ):
 #     try:
 #         cleaned_product_request = clean_up_dict(product_request.model_dump())
-#         product = product_service.update_product(id, **cleaned_product_request)
+#         product = product_service.update_product(
+# id, **cleaned_product_request)
 
 #         response.status_code = status.HTTP_200_OK
-#         response.headers[HEADER_CONTENT_TYPE] = HEADER_CONTENT_TYPE_APPLICATION_JSON
+#         response.headers[HEADER_CONTENT_TYPE] = (
+#             HEADER_CONTENT_TYPE_APPLICATION_JSON
+#         )
 
 #         return product
 #     except NoDocumentsFoundException:
