@@ -8,21 +8,11 @@ class ProductsDatabaseInterface(abc.ABC):
     def __init__(self): ...
 
     @abc.abstractmethod
-    def add(self, product: Product) -> Product:
+    def add_product(self, product: Product) -> dict:
         raise NotImplementedError
 
     @abc.abstractmethod
-    def get_by_id(self, product_id: int) -> Product | None:
-        raise NotImplementedError
-
-    @abc.abstractmethod
-    def list_products(
-        self, filters: dict, page: int, page_size: int
-    ) -> list[Product]:
-        raise NotImplementedError
-
-    @abc.abstractmethod
-    def count_products(self, filters: dict) -> int:
+    def update_product(self, product: Product, update_set: dict) -> dict:
         raise NotImplementedError
 
     @abc.abstractmethod
@@ -30,9 +20,11 @@ class ProductsDatabaseInterface(abc.ABC):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def exists_by_id(self, product_id: int) -> bool:
+    def list_products(
+        self, filters: dict, page: int, page_size: int
+    ) -> list[dict]:
         raise NotImplementedError
 
     @abc.abstractmethod
-    def update_product(self, product_id: int, **kwargs) -> Product:
+    def count_products(self, filters: dict) -> int:
         raise NotImplementedError
