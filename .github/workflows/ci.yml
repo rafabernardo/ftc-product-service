@@ -10,6 +10,13 @@ on:
 jobs:
   build-and-analyze:
     runs-on: ubuntu-latest
+    env:
+      MONGO_USERNAME: ""
+      MONGO_PASSWORD: ""
+      MONGO_PORT: "000"
+      MONGO_URL: ""
+      MONGO_DATABASE: ""
+      API_PORT: "000"
     permissions:
       contents: write
       pull-requests: write

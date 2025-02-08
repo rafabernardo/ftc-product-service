@@ -1,27 +1,10 @@
-import os
-from unittest.mock import Mock, patch
+from unittest.mock import Mock
 
 import mongomock
 import pytest
 from dependency_injector import providers
 
 from src.core.dependency_injection import Container
-
-
-@pytest.fixture(autouse=True)
-def mock_env():
-    with patch.dict(
-        os.environ,
-        {
-            "MONGO_DATABASE": "fake_key",
-            "MONGO_PASSWORD": "fake_url",
-            "MONGO_USERNAME": "fake_url",
-            "MONGO_PORT": "00",
-            "API_PORT": "00",
-            "MONGO_URL": "",
-        },
-    ):
-        yield
 
 
 @pytest.fixture
