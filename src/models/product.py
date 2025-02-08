@@ -11,16 +11,13 @@ class Category(Enum):
     dessert = "dessert"
 
 
-class BaseProduct(BaseModel):
+class Product(BaseModel):
+    id: str | None = None
     name: str
     category: str
     price: int
     description: str
     image: str
-
-
-class Product(BaseProduct):
-    id: int | None = None
     created_at: datetime | None = None
     updated_at: datetime | None = None
 
@@ -30,5 +27,5 @@ class Product(BaseProduct):
         try:
             Category(v)
             return v
-        except ValueError as e:
-            raise ValueError(f"Invalid category value: {v}") from e
+        except ValueError as err:
+            raise ValueError(f"Invalid status value: {v}") from err

@@ -8,14 +8,12 @@ authors = [
 ]
 readme = "README.md"
 packages = [
-    { include = "api", from = "src"},
-    { include = "controllers", from = "src"},
     { include = "core", from = "src"},
-    { include = "external", from = "src"},
-    { include = "gateways", from = "src"},
-    { include = "interfaces", from = "src"},
     { include = "models", from = "src"},
-    { include = "use_cases", from = "src"},
+    { include = "api", from = "src"},
+    { include = "db", from = "src"},
+    { include = "repositories", from = "src"},
+    { include = "services", from = "src"},
 ]
 
 [tool.poetry.dependencies]
@@ -37,6 +35,9 @@ black = "^24.4.2"
 isort = "^5.13.2"
 pylint = "^3.1.0"
 pre-commit = "^4.1.0"
+mongomock = "^4.1.2"
+pytest-mock = "^3.10.0"
+
 
 [build-system]
 requires = ["poetry-core"]
@@ -96,3 +97,7 @@ disable = [
   "c-extension-no-member",  # Disable the check for C extensions
   "W0311,W0603,R0903,C0111,C0103",  # Other disabled checks
 ]
+
+[tool.pylint.SIMILARITIES]
+# Minimum lines number of a similarity.
+min-similarity-lines=6
