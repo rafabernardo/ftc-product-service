@@ -30,11 +30,11 @@ def mock_mongo_db(container: Container):
     container.mongo_database.reset_override()
 
 
-@pytest.fixture
+@pytest.fixture(autouse=True)
 def mock_env(monkeypatch):
-    monkeypatch.setenv("API_PORT", 0000)
+    monkeypatch.setenv("API_PORT", "00")
     monkeypatch.setenv("MONGO_URL", "")
-    monkeypatch.setenv("MONGO_PORT", 000)
+    monkeypatch.setenv("MONGO_PORT", "00")
     monkeypatch.setenv("MONGO_USERNAME", "")
     monkeypatch.setenv("MONGO_PASSWORD", "")
     monkeypatch.setenv("MONGO_DATABASE", "")
