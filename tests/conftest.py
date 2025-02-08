@@ -19,7 +19,7 @@ def mocked_database():
 
 
 @pytest.fixture
-def container(mock_env):
+def container():
     return Container()
 
 
