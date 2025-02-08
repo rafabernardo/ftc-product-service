@@ -1,4 +1,5 @@
-from unittest.mock import Mock
+import os
+from unittest.mock import Mock, patch
 
 import mongomock
 import pytest
@@ -31,12 +32,16 @@ def mock_mongo_db(container: Container):
 
 
 @pytest.fixture(autouse=True)
-def mock_env(monkeypatch):
-    monkeypatch.setenv("API_PORT", "00")
-    monkeypatch.setenv("MONGO_URL", "")
-    monkeypatch.setenv("MONGO_PORT", "00")
-    monkeypatch.setenv("MONGO_USERNAME", "")
-    monkeypatch.setenv("MONGO_PASSWORD", "")
-    monkeypatch.setenv("MONGO_DATABASE", "")
-
-    yield
+def mock_env():
+    with patch.dict(
+        os.environ,
+        {
+            "MONGO_DATABASE": "fake_key",
+            "MONGO_PASSWORD": "fake_url",
+            "MONGO_USERNAME": "fake_url",
+            "MONGO_PORT": "00",
+            "API_PORT": "00",
+            "MONGO_URL": "",
+        },
+    ):
+        yield
