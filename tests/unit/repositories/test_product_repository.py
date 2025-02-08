@@ -1,9 +1,6 @@
 from datetime import datetime
-from unittest.mock import Mock
 
-import mongomock
 import pytest
-from dependency_injector import providers
 
 from src.core.dependency_injection import Container
 from src.models.product import Product
@@ -11,7 +8,7 @@ from src.repositories.product_repository import ProductMongoRepository
 
 
 @pytest.fixture
-def mock_product():
+def mock_product() -> Product:
     return Product(
         name="Test Product",
         category="meal",
@@ -19,29 +16,6 @@ def mock_product():
         description="Test description",
         image="test-image.jpg",
     )
-
-
-@pytest.fixture
-def mock_mongo_collection():
-    collection_mock = Mock()
-    return collection_mock
-
-
-def mocked_database():
-    client_mock = mongomock.MongoClient()
-    return client_mock.db
-
-
-@pytest.fixture
-def container():
-    return Container()
-
-
-@pytest.fixture
-def mock_mongo_db(container: Container):
-    container.mongo_database.override(providers.Factory(mocked_database))
-    yield
-    container.mongo_database.reset_override()
 
 
 @pytest.fixture
