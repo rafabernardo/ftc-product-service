@@ -40,9 +40,7 @@ async def list_users(
         raise InternalServerErrorHTTPException() from exc
 
     response.status_code = status.HTTP_200_OK
-    response.headers[HEADER_CONTENT_TYPE] = (
-        HEADER_CONTENT_TYPE_APPLICATION_JSON
-    )
+    response.headers[HEADER_CONTENT_TYPE] = HEADER_CONTENT_TYPE_APPLICATION_JSON
 
     return users
 
@@ -64,9 +62,7 @@ async def get_user_by_id(
     if not user:
         raise NoDocumentsFoundHTTPException()
     response.status_code = status.HTTP_200_OK
-    response.headers[HEADER_CONTENT_TYPE] = (
-        HEADER_CONTENT_TYPE_APPLICATION_JSON
-    )
+    response.headers[HEADER_CONTENT_TYPE] = HEADER_CONTENT_TYPE_APPLICATION_JSON
 
     return user
 
@@ -94,9 +90,7 @@ async def get_user_by_cpf(
         raise NoDocumentsFoundHTTPException()
 
     response.status_code = status.HTTP_200_OK
-    response.headers[HEADER_CONTENT_TYPE] = (
-        HEADER_CONTENT_TYPE_APPLICATION_JSON
-    )
+    response.headers[HEADER_CONTENT_TYPE] = HEADER_CONTENT_TYPE_APPLICATION_JSON
 
     return user
 
@@ -117,16 +111,12 @@ async def register(
     except UserAlreadyExistsError as exc:
         raise NoDocumentsFoundHTTPException(detail=exc.message) from exc
     except UserInvalidFormatDataError as exc:
-        raise UnprocessableEntityErrorHTTPException(
-            detail=exc.message
-        ) from exc
+        raise UnprocessableEntityErrorHTTPException(detail=exc.message) from exc
     except Exception as exc:
         raise InternalServerErrorHTTPException() from exc
 
     response.status_code = status.HTTP_201_CREATED
-    response.headers[HEADER_CONTENT_TYPE] = (
-        HEADER_CONTENT_TYPE_APPLICATION_JSON
-    )
+    response.headers[HEADER_CONTENT_TYPE] = HEADER_CONTENT_TYPE_APPLICATION_JSON
 
     return created_user
 

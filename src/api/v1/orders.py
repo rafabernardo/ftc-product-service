@@ -67,9 +67,7 @@ async def list_orders(
             if order.owner_id
             else None
         )
-        order_response = OrderV1Response(
-            **order.model_dump(), owner=owner_data
-        )
+        order_response = OrderV1Response(**order.model_dump(), owner=owner_data)
         listed_orders.append(order_response)
 
     paginated_orders = ListOrderV1Response(
@@ -77,9 +75,7 @@ async def list_orders(
     )
 
     response.status_code = status.HTTP_200_OK
-    response.headers[HEADER_CONTENT_TYPE] = (
-        HEADER_CONTENT_TYPE_APPLICATION_JSON
-    )
+    response.headers[HEADER_CONTENT_TYPE] = HEADER_CONTENT_TYPE_APPLICATION_JSON
     return paginated_orders
 
 
@@ -107,9 +103,7 @@ async def get_order_by_id(
     order_response = OrderV1Response(**order.model_dump(), owner=owner_data)
 
     response.status_code = status.HTTP_200_OK
-    response.headers[HEADER_CONTENT_TYPE] = (
-        HEADER_CONTENT_TYPE_APPLICATION_JSON
-    )
+    response.headers[HEADER_CONTENT_TYPE] = HEADER_CONTENT_TYPE_APPLICATION_JSON
     return order_response
 
 
@@ -164,9 +158,7 @@ async def register(
         raise InternalServerErrorHTTPException() from exc
 
     response.status_code = status.HTTP_201_CREATED
-    response.headers[HEADER_CONTENT_TYPE] = (
-        HEADER_CONTENT_TYPE_APPLICATION_JSON
-    )
+    response.headers[HEADER_CONTENT_TYPE] = HEADER_CONTENT_TYPE_APPLICATION_JSON
 
     return created_order
 
@@ -283,9 +275,7 @@ async def display_orders(
             if order.owner_id
             else None
         )
-        order_response = OrderV1Response(
-            **order.model_dump(), owner=owner_data
-        )
+        order_response = OrderV1Response(**order.model_dump(), owner=owner_data)
         listed_orders.append(order_response)
 
     paginated_orders = ListOrderV1Response(
@@ -293,7 +283,5 @@ async def display_orders(
     )
 
     response.status_code = status.HTTP_200_OK
-    response.headers[HEADER_CONTENT_TYPE] = (
-        HEADER_CONTENT_TYPE_APPLICATION_JSON
-    )
+    response.headers[HEADER_CONTENT_TYPE] = HEADER_CONTENT_TYPE_APPLICATION_JSON
     return paginated_orders

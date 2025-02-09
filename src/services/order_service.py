@@ -50,9 +50,7 @@ class OrderService:
         return listed_orders
 
     def count_orders(self, order_filter: OrderFilter) -> int:
-        total_orders = self.repository.count_entities(
-            order_filter=order_filter
-        )
+        total_orders = self.repository.count_entities(order_filter=order_filter)
         return total_orders
 
     def delete_order(self, order_id: str) -> bool:

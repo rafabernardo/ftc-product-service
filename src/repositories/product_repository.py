@@ -55,9 +55,7 @@ class ProductMongoRepository(ProductsRepositoryInterface):
 
     def update_entity(self, entity_id: str, **kwargs) -> Product:
         id_filter = self.get_product_by_id_query(product_id=entity_id)
-        product_to_update = prepare_document_to_db(
-            kwargs, skip_created_at=True
-        )
+        product_to_update = prepare_document_to_db(kwargs, skip_created_at=True)
         query = self.get_product_update_data(product_to_update)
         updated_product = self.collection.find_one_and_update(
             id_filter,
