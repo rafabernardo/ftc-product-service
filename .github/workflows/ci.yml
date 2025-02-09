@@ -53,7 +53,7 @@ jobs:
         run: poetry install --no-interaction
 
       - name: Run tests with coverage
-        run: poetry run pytest --cov=src --cov-report=xml:coverage.xml
+        run: poetry run pytest --cov=src --cov-report=xml:coverage.xml --cov-report=term
 
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v4
@@ -61,10 +61,11 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Required for PR decoration
         with:
-          args: >
-            -Dsonar.organization=rafabernardo
-            -Dsonar.projectKey=rafabernardo_ftc-product-service
-            -Dsonar.coverageReportPaths=coverage.xml
-            -Dsonar.tests=tests/
-            -Dsonar.test.exclusions=tests/**
-            -Dsonar.verbose=true
+        args: >
+          -Dsonar.organization=rafabernardo
+          -Dsonar.projectKey=rafabernardo_ftc-product-service
+          -Dsonar.coverageReportPaths=coverage.xml
+          -Dsonar.python.coverage.reportPaths=coverage.xml
+          -Dsonar.tests=tests/
+          -Dsonar.test.exclusions=tests/**
+          -Dsonar.verbose=true
