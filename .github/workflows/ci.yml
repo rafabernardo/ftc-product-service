@@ -69,3 +69,6 @@ jobs:
             -Dsonar.tests=tests/
             -Dsonar.test.exclusions=tests/**
             -Dsonar.verbose=true
+            -Dsonar.python.coveragePlugin=cobertura
+            -Dsonar.coverage.dtdVerification=false
+            -Dsonar.sourceEncoding=UTF-8
