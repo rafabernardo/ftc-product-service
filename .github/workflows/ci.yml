@@ -60,12 +60,12 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Required for PR decoration
-          with:
-            args: >
-              -Dsonar.organization=rafabernardo
-              -Dsonar.projectKey=rafabernardo_ftc-product-service
-              -Dsonar.coverageReportPaths=coverage.xml
-              -Dsonar.python.coverage.reportPaths=coverage.xml
-              -Dsonar.tests=tests/
-              -Dsonar.test.exclusions=tests/**
-              -Dsonar.verbose=true
+        with:
+          args: >
+            -Dsonar.organization=rafabernardo
+            -Dsonar.projectKey=rafabernardo_ftc-product-service
+            -Dsonar.coverageReportPaths=coverage.xml
+            -Dsonar.python.coverage.reportPaths=coverage.xml
+            -Dsonar.tests=tests/
+            -Dsonar.test.exclusions=tests/**
+            -Dsonar.verbose=true
