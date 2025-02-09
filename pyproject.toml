@@ -101,3 +101,7 @@ disable = [
 [tool.pylint.SIMILARITIES]
 # Minimum lines number of a similarity.
 min-similarity-lines=6
+
+[tool.coverage.run]
+source = ['src']
+relative_files = true
