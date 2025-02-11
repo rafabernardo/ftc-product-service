@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import UTC, datetime
 
 
 def clean_cpf_to_db(cpf: str) -> str:
@@ -6,7 +6,7 @@ def clean_cpf_to_db(cpf: str) -> str:
 
 
 def get_seconds_diff(dt: datetime) -> float:
-    now = datetime.now()
+    now = datetime.now(tz=UTC)
     diff = now - dt
     total_seconds = diff.total_seconds()
     return total_seconds

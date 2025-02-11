@@ -1,6 +1,6 @@
-from datetime import datetime, timedelta
+from datetime import UTC, datetime, timedelta
 
-import pytest
+from freezegun import freeze_time
 
 from services.utils import clean_cpf_to_db, get_seconds_diff
 
@@ -12,11 +12,11 @@ def test_clean_cpf_to_db():
 
 
 def test_get_seconds_diff():
-    dt = datetime.now() - timedelta(seconds=10)
-    assert get_seconds_diff(dt) == pytest.approx(10, rel=1e-2)
+    with freeze_time("2023-10-01 12:00:00"):
+        frozen_now = datetime.now(tz=UTC)
 
-    dt = datetime.now() - timedelta(minutes=5)
-    assert get_seconds_diff(dt) == pytest.approx(300, rel=1e-2)
+        dt1 = frozen_now
+        assert get_seconds_diff(dt1) == 0.0  # No difference in time
 
-    dt = datetime.now() - timedelta(hours=1)
-    assert get_seconds_diff(dt) == pytest.approx(3600, rel=1e-2)
+        dt2 = frozen_now - timedelta(seconds=10)  # Subtrac
+        assert get_seconds_diff(dt2) == 10.0  # 10 seconds difference

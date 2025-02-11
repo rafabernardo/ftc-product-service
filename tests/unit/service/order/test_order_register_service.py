@@ -27,7 +27,7 @@ def order_service(order_repository):
     return order_service
 
 
-def test_register_product_success(
+def test_register_order_success(
     order_service: OrderService,
     order_repository: OrderMongoRepository,
     mock_order: Order,
