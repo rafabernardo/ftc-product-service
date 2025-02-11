@@ -3,19 +3,7 @@ from datetime import datetime
 import pytest
 
 from src.core.dependency_injection import Container
-from src.models.product import Product
 from src.repositories.product_repository import ProductMongoRepository
-
-
-@pytest.fixture
-def mock_product() -> Product:
-    return Product(
-        name="Test Product",
-        category="meal",
-        price=1000,
-        description="Test description",
-        image="test-image.jpg",
-    )
 
 
 @pytest.fixture
