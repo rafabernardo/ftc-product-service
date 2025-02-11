@@ -12,29 +12,6 @@ from services.user_service import UserService
 
 
 @pytest.fixture
-def user_mock():
-    return User(
-        id="67a77edeaf970c68f41cc3d3",
-        name="Rafaela",
-        email="email@email.com",
-        cpf="54768430007",
-        created_at="2025-02-08T12:57:18.267Z",
-        updated_at="2025-02-08T12:57:18.267Z",
-    )
-
-
-@pytest.fixture
-def user_mock_without_cpf():
-    return User(
-        id="67a77edeaf970c68f41cc3d3",
-        name="Rafaela",
-        email="email@email.com",
-        created_at="2025-02-08T12:57:18.267Z",
-        updated_at="2025-02-08T12:57:18.267Z",
-    )
-
-
-@pytest.fixture
 def user_repository():
     repository = MagicMock()  # Mock the entire repository
     return repository
