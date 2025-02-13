@@ -26,7 +26,6 @@ pydantic = "^2.8"
 pydantic-settings = "^2.3.4"
 uvicorn = "^0.30.3"
 pymongo = "^4.11"
-pytest-freezegun = "^0.4.2"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3"
