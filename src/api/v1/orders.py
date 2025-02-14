@@ -179,9 +179,6 @@ async def delete(
 
         if was_order_deleted:
             response.status_code = status.HTTP_204_NO_CONTENT
-            return
-        raise InternalServerErrorHTTPException()
-
     except NoDocumentsFoundException as exc:
         raise NoDocumentsFoundHTTPException(detail=exc.message) from exc
     except Exception as exc:

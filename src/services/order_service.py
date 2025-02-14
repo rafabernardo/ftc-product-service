@@ -57,7 +57,7 @@ class OrderService:
         order = self.get_order_by_id(order_id)
         if order is None:
             raise NoDocumentsFoundException()
-        was_order_deleted = self.repository.delete_entity(order_id=order_id)
+        was_order_deleted = self.repository.delete_entity(entity_id=order_id)
         return was_order_deleted
 
     def set_payment_status(self, order_id: str, payment_result: bool):

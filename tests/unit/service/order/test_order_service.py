@@ -64,7 +64,7 @@ def test_delete_order_success(order_service, mock_repository, mock_order):
         "67a77edeaf970c68f41cc3d4"
     )
     mock_repository.delete_entity.assert_called_once_with(
-        order_id="67a77edeaf970c68f41cc3d4"
+        entity_id="67a77edeaf970c68f41cc3d4"
     )
 
 
