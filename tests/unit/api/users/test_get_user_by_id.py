@@ -34,7 +34,7 @@ def setup(container):
     container.unwire()
 
 
-def test_get_user_by_cpf_success(user_service_mock):
+def test_get_user_by_id_success(user_service_mock):
     user_service_mock.get_user_by_id.return_value = {
         "id": "67a77edeaf970c68f41cc3d3",
         "name": "Rafaela",
@@ -50,7 +50,7 @@ def test_get_user_by_cpf_success(user_service_mock):
     assert response.json()["id"] == "67a77edeaf970c68f41cc3d3"
 
 
-def test_get_user_by_cpf_not_found(user_service_mock):
+def test_get_user_by_id_not_found(user_service_mock):
     user_service_mock.get_user_by_id.return_value = None
     with pytest.raises(
         NoDocumentsFoundHTTPException, match="No document found"
@@ -62,7 +62,7 @@ def test_get_user_by_cpf_not_found(user_service_mock):
         assert response.json() == {"detail": "No documents found"}
 
 
-def test_get_user_by_cpf_internal_server_error(user_service_mock):
+def test_get_user_by_id_internal_server_error(user_service_mock):
     user_service_mock.get_user_by_id.side_effect = Exception("Unexpected error")
     with pytest.raises(
         InternalServerErrorHTTPException, match="Internal server error"
