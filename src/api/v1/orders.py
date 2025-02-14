@@ -93,20 +93,25 @@ async def get_order_by_id(
         Provide[Container.user_service]
     ),
 ) -> OrderV1Response:
-    order = order_service.get_order_by_id(order_id)
-    if order is None:
-        raise NoDocumentsFoundHTTPException()
+    try:
+        order = order_service.get_order_by_id(order_id)
+        if order is None:
+            raise NoDocumentsFoundHTTPException()
 
-    owner_data = (
-        user_service.get_user_by_id(order.owner_id).model_dump()
-        if order.owner_id
-        else None
-    )
-    order_response = OrderV1Response(**order.model_dump(), owner=owner_data)
+        owner_data = (
+            user_service.get_user_by_id(order.owner_id).model_dump()
+            if order.owner_id
+            else None
+        )
+        order_response = OrderV1Response(**order.model_dump(), owner=owner_data)
 
-    response.status_code = status.HTTP_200_OK
-    response.headers[HEADER_CONTENT_TYPE] = HEADER_CONTENT_TYPE_APPLICATION_JSON
-    return order_response
+        response.status_code = status.HTTP_200_OK
+        response.headers[HEADER_CONTENT_TYPE] = (
+            HEADER_CONTENT_TYPE_APPLICATION_JSON
+        )
+        return order_response
+    except Exception as exc:
+        raise InternalServerErrorHTTPException() from exc
 
 
 @router.post("", response_model=RegisterOrderV1Response)

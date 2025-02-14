@@ -122,18 +122,15 @@ async def delete(
     ),
 ):
     try:
-        was_product_deleted = product_service.delete_product(product_id)
-        response.status_code = status.HTTP_204_NO_CONTENT
-        response.headers[HEADER_CONTENT_TYPE] = (
-            HEADER_CONTENT_TYPE_APPLICATION_JSON
-        )
-        if not was_product_deleted:
-            raise InternalServerErrorHTTPException()
+        product_service.delete_product(product_id)
 
     except NoDocumentsFoundException as exc:
         raise NoDocumentsFoundHTTPException() from exc
     except Exception as exc:
         raise InternalServerErrorHTTPException() from exc
+
+    response.status_code = status.HTTP_204_NO_CONTENT
+    response.headers[HEADER_CONTENT_TYPE] = HEADER_CONTENT_TYPE_APPLICATION_JSON
 
 
 @router.patch("/{product_id}", response_model=ProductV1Response)

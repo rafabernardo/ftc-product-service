@@ -7,23 +7,23 @@ from api.v1.exceptions.commons import (
     InternalServerErrorHTTPException,
     NoDocumentsFoundHTTPException,
 )
-from api.v1.orders import router
+from api.v1.products import router
 from core.dependency_injection import Container
 from core.exceptions.commons_exceptions import NoDocumentsFoundException
-from services.order_service import OrderService
+from services.product_service import ProductService
 
 client = TestClient(router)
 
 
 @pytest.fixture
-def order_service_mock():
-    return Mock(spec=OrderService)
+def product_service_mock():
+    return Mock(spec=ProductService)
 
 
 @pytest.fixture
-def container(order_service_mock):
+def container(product_service_mock):
     container = Container()
-    container.order_service.override(order_service_mock)
+    container.product_service.override(product_service_mock)
     return container
 
 
@@ -35,34 +35,35 @@ def setup(container):
     container.unwire()
 
 
-def test_delete_order_sucess(
-    order_service_mock,
-):
-    order_service_mock.delete_order.return_value = True
-
-    response = client.delete("/orders/67a77edeaf970c68f41cc3d4")
+def test_delete_product_success(product_service_mock):
+    product_service_mock.delete_product.return_value = True
+    response = client.delete("/products/67a77edeaf970c68f41cc3d3")
 
     assert response.status_code == 204
 
 
-def test_delete_order_not_found(order_service_mock):
-    order_service_mock.delete_order.side_effect = NoDocumentsFoundException()
+def test_delete_product_not_found(product_service_mock):
+    product_service_mock.delete_product.side_effect = (
+        NoDocumentsFoundException()
+    )
     with pytest.raises(
         NoDocumentsFoundHTTPException, match="No document found"
     ):
 
-        response = client.delete("/orders/67a77edeaf970c68f41cc3d3")
+        response = client.delete("/products/67a77edeaf970c68f41cc3d3")
 
         assert response.status_code == 404
         assert response.json() == {"detail": "No documents found"}
 
 
-def test_delete_order_internal_server_error(order_service_mock):
-    order_service_mock.delete_order.side_effect = Exception("Unexpected error")
+def test_delete_order_internal_server_error(product_service_mock):
+    product_service_mock.delete_product.side_effect = Exception(
+        "Unexpected error"
+    )
     with pytest.raises(
         InternalServerErrorHTTPException, match="Internal server error"
     ):
-        response = client.delete("/orders/67a77edeaf970c68f41cc3d3")
+        response = client.delete("/products/67a77edeaf970c68f41cc3d3")
 
         assert response.status_code == 500
         assert response.json() == {"detail": "Internal server error"}
