@@ -44,9 +44,7 @@ def list_products(
             page=page,
             page_size=page_size,
         )
-        total_products = product_service.count_products(
-            filter_prod=filter_prod
-        )
+        total_products = product_service.count_products(filter_prod=filter_prod)
 
         pagination_info = get_pagination_info(
             total_results=total_products, page=page, page_size=page_size
@@ -87,9 +85,7 @@ async def get_product_by_id(
     if not product:
         raise NoDocumentsFoundHTTPException()
     response.status_code = status.HTTP_200_OK
-    response.headers[HEADER_CONTENT_TYPE] = (
-        HEADER_CONTENT_TYPE_APPLICATION_JSON
-    )
+    response.headers[HEADER_CONTENT_TYPE] = HEADER_CONTENT_TYPE_APPLICATION_JSON
 
     return product
 
@@ -126,18 +122,15 @@ async def delete(
     ),
 ):
     try:
-        was_product_deleted = product_service.delete_product(product_id)
-        response.status_code = status.HTTP_204_NO_CONTENT
-        response.headers[HEADER_CONTENT_TYPE] = (
-            HEADER_CONTENT_TYPE_APPLICATION_JSON
-        )
-        if not was_product_deleted:
-            raise InternalServerErrorHTTPException()
+        product_service.delete_product(product_id)
 
     except NoDocumentsFoundException as exc:
         raise NoDocumentsFoundHTTPException() from exc
     except Exception as exc:
         raise InternalServerErrorHTTPException() from exc
+
+    response.status_code = status.HTTP_204_NO_CONTENT
+    response.headers[HEADER_CONTENT_TYPE] = HEADER_CONTENT_TYPE_APPLICATION_JSON
 
 
 @router.patch("/{product_id}", response_model=ProductV1Response)

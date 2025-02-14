@@ -10,6 +10,14 @@
       "request": "launch",
       "module": "uvicorn",
       "args": ["src.api.app:app", "--reload"]
+    },
+    {
+      "name": "Python: Test",
+      "type": "python",
+      "request": "launch",
+      "console": "internalConsole",
+      "purpose": ["debug-test"],
+      "module": "pytest"
     }
   ]
 }

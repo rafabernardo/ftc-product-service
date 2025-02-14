@@ -40,7 +40,7 @@ class OrderService:
         self, order_filter: OrderFilter, page: int, page_size: int
     ) -> list[OrderOutput]:
         paginated_orders = self.repository.list_entities(
-            order_filter=order_filter, page=page, page_size=page_size
+            filter_params=order_filter, page=page, page_size=page_size, sort={}
         )
 
         listed_orders = [
@@ -50,16 +50,14 @@ class OrderService:
         return listed_orders
 
     def count_orders(self, order_filter: OrderFilter) -> int:
-        total_orders = self.repository.count_entities(
-            order_filter=order_filter
-        )
+        total_orders = self.repository.count_entities(order_filter=order_filter)
         return total_orders
 
     def delete_order(self, order_id: str) -> bool:
         order = self.get_order_by_id(order_id)
         if order is None:
             raise NoDocumentsFoundException()
-        was_order_deleted = self.repository.delete_entity(order_id=order_id)
+        was_order_deleted = self.repository.delete_entity(entity_id=order_id)
         return was_order_deleted
 
     def set_payment_status(self, order_id: str, payment_result: bool):

@@ -25,7 +25,7 @@ from services.user_service import UserService
 HEADER_CONTENT_TYPE = "content-type"
 HEADER_CONTENT_TYPE_APPLICATION_JSON = "application/json"
 
-router = APIRouter(prefix="/order")
+router = APIRouter(prefix="/orders")
 
 
 class ListOrdersQueryParams(BaseModel):
@@ -38,7 +38,9 @@ class ListOrdersQueryParams(BaseModel):
 @inject
 async def list_orders(
     response: Response,
-    query_params: ListOrdersQueryParams = Depends(),  # noqa: B008
+    order_status: list[Status] = Query(None),  # noqa: B008
+    page: int = Query(default=1, gt=0),
+    page_size: int = Query(default=10, gt=0, le=100),
     order_service: OrderService = Depends(  # noqa: B008
         Provide[Container.order_service]
     ),
@@ -46,19 +48,19 @@ async def list_orders(
         Provide[Container.user_service]
     ),
 ) -> ListOrderV1Response:
-    orders_filter = OrderFilter(status=query_params.order_status)
+    orders_filter = OrderFilter(status=order_status)
 
     orders = order_service.list_orders(
         order_filter=orders_filter,
-        page=query_params.page,
-        page_size=query_params.page_size,
+        page=page,
+        page_size=page_size,
     )
     total_orders = order_service.count_orders(order_filter=orders_filter)
 
     pagination_info = get_pagination_info(
         total_results=total_orders,
-        page=query_params.page,
-        page_size=query_params.page_size,
+        page=page,
+        page_size=page_size,
     )
     listed_orders = []
     for order in orders:
@@ -67,9 +69,7 @@ async def list_orders(
             if order.owner_id
             else None
         )
-        order_response = OrderV1Response(
-            **order.model_dump(), owner=owner_data
-        )
+        order_response = OrderV1Response(**order.model_dump(), owner=owner_data)
         listed_orders.append(order_response)
 
     paginated_orders = ListOrderV1Response(
@@ -77,9 +77,7 @@ async def list_orders(
     )
 
     response.status_code = status.HTTP_200_OK
-    response.headers[HEADER_CONTENT_TYPE] = (
-        HEADER_CONTENT_TYPE_APPLICATION_JSON
-    )
+    response.headers[HEADER_CONTENT_TYPE] = HEADER_CONTENT_TYPE_APPLICATION_JSON
     return paginated_orders
 
 
@@ -95,22 +93,25 @@ async def get_order_by_id(
         Provide[Container.user_service]
     ),
 ) -> OrderV1Response:
-    order = order_service.get_order_by_id(order_id)
-    if order is None:
-        raise NoDocumentsFoundHTTPException()
+    try:
+        order = order_service.get_order_by_id(order_id)
+        if order is None:
+            raise NoDocumentsFoundHTTPException()
 
-    owner_data = (
-        user_service.get_user_by_id(order.owner_id).model_dump()
-        if order.owner_id
-        else None
-    )
-    order_response = OrderV1Response(**order.model_dump(), owner=owner_data)
+        owner_data = (
+            user_service.get_user_by_id(order.owner_id).model_dump()
+            if order.owner_id
+            else None
+        )
+        order_response = OrderV1Response(**order.model_dump(), owner=owner_data)
 
-    response.status_code = status.HTTP_200_OK
-    response.headers[HEADER_CONTENT_TYPE] = (
-        HEADER_CONTENT_TYPE_APPLICATION_JSON
-    )
-    return order_response
+        response.status_code = status.HTTP_200_OK
+        response.headers[HEADER_CONTENT_TYPE] = (
+            HEADER_CONTENT_TYPE_APPLICATION_JSON
+        )
+        return order_response
+    except Exception as exc:
+        raise InternalServerErrorHTTPException() from exc
 
 
 @router.post("", response_model=RegisterOrderV1Response)
@@ -164,9 +165,7 @@ async def register(
         raise InternalServerErrorHTTPException() from exc
 
     response.status_code = status.HTTP_201_CREATED
-    response.headers[HEADER_CONTENT_TYPE] = (
-        HEADER_CONTENT_TYPE_APPLICATION_JSON
-    )
+    response.headers[HEADER_CONTENT_TYPE] = HEADER_CONTENT_TYPE_APPLICATION_JSON
 
     return created_order
 
@@ -185,9 +184,6 @@ async def delete(
 
         if was_order_deleted:
             response.status_code = status.HTTP_204_NO_CONTENT
-            return
-        raise InternalServerErrorHTTPException()
-
     except NoDocumentsFoundException as exc:
         raise NoDocumentsFoundHTTPException(detail=exc.message) from exc
     except Exception as exc:
@@ -283,9 +279,7 @@ async def display_orders(
             if order.owner_id
             else None
         )
-        order_response = OrderV1Response(
-            **order.model_dump(), owner=owner_data
-        )
+        order_response = OrderV1Response(**order.model_dump(), owner=owner_data)
         listed_orders.append(order_response)
 
     paginated_orders = ListOrderV1Response(
@@ -293,7 +287,5 @@ async def display_orders(
     )
 
     response.status_code = status.HTTP_200_OK
-    response.headers[HEADER_CONTENT_TYPE] = (
-        HEADER_CONTENT_TYPE_APPLICATION_JSON
-    )
+    response.headers[HEADER_CONTENT_TYPE] = HEADER_CONTENT_TYPE_APPLICATION_JSON
     return paginated_orders

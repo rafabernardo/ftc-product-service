@@ -6,6 +6,10 @@ from models.user import User
 
 class UserRepositoryInterface(BaseRepositoryInterface[User]):
     @abc.abstractmethod
+    def add(self, user: User) -> User:
+        raise NotImplementedError
+
+    @abc.abstractmethod
     def exists_by_cpf(self, cpf: str) -> bool:
         raise NotImplementedError
 
