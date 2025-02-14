@@ -3,6 +3,7 @@ from unittest.mock import Mock
 import pytest
 from fastapi.testclient import TestClient
 
+from api.v1.exceptions.commons import InternalServerErrorHTTPException
 from api.v1.models.user import UserV1Response
 from api.v1.users import router
 from core.dependency_injection import Container
@@ -48,3 +49,16 @@ def test_list_users(user_service_mock):
     assert response.status_code == 200
     assert len(response.json()) == 1
     user_service_mock.list_users.assert_called_once()
+
+
+def test_list_users_internal_server_error(user_service_mock):
+    user_service_mock.list_users.side_effect = Exception(
+        "Internal server error"
+    )
+    with pytest.raises(
+        InternalServerErrorHTTPException, match="Internal server error"
+    ):
+        response = client.get("/users")
+
+        assert response.status_code == 500
+        assert response.json() == {"detail": "Internal server error"}
