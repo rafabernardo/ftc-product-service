@@ -8,13 +8,12 @@ authors = [
 ]
 readme = "README.md"
 packages = [
-    { include = "api", from = "src"},
     { include = "core", from = "src"},
-    { include = "external", from = "src"},
-    { include = "gateways", from = "src"},
-    { include = "interfaces", from = "src"},
     { include = "models", from = "src"},
-    { include = "use_cases", from = "src"},
+    { include = "api", from = "src"},
+    { include = "db", from = "src"},
+    { include = "repositories", from = "src"},
+    { include = "services", from = "src"},
 ]
 
 [tool.poetry.dependencies]
@@ -26,6 +25,8 @@ fastapi_healthcheck = "^0.2.12"
 pydantic = "^2.8"
 pydantic-settings = "^2.3.4"
 uvicorn = "^0.30.3"
+pymongo = "^4.11"
+freezegun = "^1.5.1"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3"
@@ -35,6 +36,9 @@ black = "^24.4.2"
 isort = "^5.13.2"
 pylint = "^3.1.0"
 pre-commit = "^4.1.0"
+mongomock = "^4.1.2"
+pytest-mock = "^3.10.0"
+
 
 [build-system]
 requires = ["poetry-core"]
@@ -45,19 +49,18 @@ create = true
 in-project = true
 
 [tool.black]
-line-length = 79
+line-length = 80
 target-version = ["py311"]
 
 [tool.isort]
 atomic = true
 profile = "black"
-line_length = 79
+line_length = 80
 skip_gitignore = true
 skip_glob = ["tests/data", "profiling"]
-known_first_party = ["core", "models", "api", "db", "repositories", "services"]
 
 [tool.ruff]
-line-length = 79
+line-length = 80
 target-version = "py311"
 exclude = [
   "tests/data",  # Exclude test data
@@ -80,13 +83,13 @@ ignore = [
 ]
 
 [tool.pylint.MASTER]
-disable = "C0111,C0103"
+disable = "C0111,C0103,R0913,R0917"
 ignore = "CVS"
 persistent = "yes"
 init-hook='import sys; sys.path.append("src")'
 
 [tool.pylint.FORMAT]
-max-line-length = 79
+max-line-length = 80
 max-module-lines = 1000
 
 [tool.pylint.MESSAGES_CONTROL]
@@ -95,3 +98,11 @@ disable = [
   "c-extension-no-member",  # Disable the check for C extensions
   "W0311,W0603,R0903,C0111,C0103",  # Other disabled checks
 ]
+
+[tool.pylint.SIMILARITIES]
+# Minimum lines number of a similarity.
+min-similarity-lines=6
+
+[tool.coverage.run]
+source = ['src']
+relative_files = true
