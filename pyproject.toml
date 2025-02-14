@@ -82,7 +82,7 @@ ignore = [
 ]
 
 [tool.pylint.MASTER]
-disable = "C0111,C0103"
+disable = "C0111,C0103,R0913,R0917"
 ignore = "CVS"
 persistent = "yes"
 init-hook='import sys; sys.path.append("src")'

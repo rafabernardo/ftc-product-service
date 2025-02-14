@@ -40,7 +40,7 @@ class OrderService:
         self, order_filter: OrderFilter, page: int, page_size: int
     ) -> list[OrderOutput]:
         paginated_orders = self.repository.list_entities(
-            order_filter=order_filter, page=page, page_size=page_size
+            filter_params=order_filter, page=page, page_size=page_size, sort={}
         )
 
         listed_orders = [
