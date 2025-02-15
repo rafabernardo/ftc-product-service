@@ -11,11 +11,6 @@ jobs:
   build-and-analyze:
     runs-on: ubuntu-latest
     env:
-      MONGO_USERNAME: ""
-      MONGO_PASSWORD: ""
-      MONGO_PORT: "000"
-      MONGO_URL: ""
-      MONGO_DATABASE: ""
       API_PORT: "000"
     permissions:
       contents: write
@@ -68,3 +63,39 @@ jobs:
             -Dsonar.tests=tests/
             -Dsonar.test.exclusions=tests/**
             -Dsonar.verbose=true
+
+  terraform-deploy:
+    runs-on: ubuntu-latest
+    env:
+      AWS_REGION: us-east-1
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
+      BUCKET_TF_STATE: ${{ secrets.AWS_BUCKET }}
+    needs: build-and-analyze # This ensures this job only runs if build-and-analyze succeeds
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.5.0" # Specify the Terraform version you want to use
+
+      - name: Create terraform.tfvars
+        working-directory: ./terraform
+        run: |
+          echo 'db_url = "${{ secrets.DB_URL }}"' > terraform.tfvars
+
+      - name: Terraform Init
+        run: -backend-config="bucket=${BUCKET_TF_STATE}"
+        working-directory: ./terraform
+        env:
+          BUCKET_TF_STATE: ${{ secrets.AWS_BUCKET }}
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
+        working-directory: ./terraform
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
