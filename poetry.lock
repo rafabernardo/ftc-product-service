@@ -1725,4 +1725,4 @@ signatures = ["dirspec", "keyring"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.11,<3.12"
-content-hash = "9d36ba89232e92bbf6008ab0257faa785b28a8e8907f56446964ce98a934697e"
+content-hash = "af73b8e396103d3c95d79152cd1f60941bdbde40c31db9703fcc0aaa1f3de019"

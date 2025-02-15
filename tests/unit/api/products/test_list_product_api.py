@@ -1,4 +1,4 @@
-from unittest.mock import Mock
+from unittest.mock import Mock, patch
 
 import pytest
 from fastapi.testclient import TestClient
@@ -31,6 +31,14 @@ def setup(container):
     container.unwire()
 
 
+async def validate_token(
+    token: str,
+):
+    """Mock JWT verification, returning a fake decoded payload."""
+    return {"valid": True}
+
+
+@patch("api.v1.products.validate_token", validate_token)
 def test_list_product(product_service_mock):
     # Arrange
 
@@ -50,7 +58,9 @@ def test_list_product(product_service_mock):
     product_service_mock.count_products.return_value = 1
 
     response = client.get(
-        "/products/", params={"category": "meal", "page": 1, "page_size": 10}
+        "/products/",
+        params={"category": "meal", "page": 1, "page_size": 10},
+        headers={"Authorization": "Bearer asda"},
     )
 
     assert response.status_code == 200

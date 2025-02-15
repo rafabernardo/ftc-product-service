@@ -1,6 +1,6 @@
 from dependency_injector.wiring import Provide, inject
 from fastapi import APIRouter, Depends, Query, Response, status
-from pydantic import BaseModel
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
 from api.v1.exceptions.commons import (
     InternalServerErrorHTTPException,
@@ -16,6 +16,7 @@ from api.v1.models.order import (
 )
 from core.dependency_injection import Container
 from core.exceptions.commons_exceptions import NoDocumentsFoundException
+from external.authentication import validate_token
 from models.order import OrderFilter, Status
 from repositories.utils import clean_up_dict, get_pagination_info
 from services.order_service import OrderService
@@ -26,12 +27,6 @@ HEADER_CONTENT_TYPE = "content-type"
 HEADER_CONTENT_TYPE_APPLICATION_JSON = "application/json"
 
 router = APIRouter(prefix="/orders")
-
-
-class ListOrdersQueryParams(BaseModel):
-    order_status: list[Status] = Query(None)
-    page: int = Query(default=1, gt=0)
-    page_size: int = Query(default=10, gt=0, le=100)
 
 
 @router.get("", response_model=ListOrderV1Response)
@@ -47,7 +42,11 @@ async def list_orders(
     user_service: UserService = Depends(  # noqa: B008
         Provide[Container.user_service]
     ),
+    auth: HTTPAuthorizationCredentials = Depends(HTTPBearer()),  # noqa: B008
 ) -> ListOrderV1Response:
+
+    token = auth.credentials
+    await validate_token(token)
     orders_filter = OrderFilter(status=order_status)
 
     orders = order_service.list_orders(
@@ -92,8 +91,11 @@ async def get_order_by_id(
     user_service: UserService = Depends(  # noqa: B008
         Provide[Container.user_service]
     ),
+    auth: HTTPAuthorizationCredentials = Depends(HTTPBearer()),  # noqa: B008
 ) -> OrderV1Response:
     try:
+        token = auth.credentials
+        await validate_token(token)
         order = order_service.get_order_by_id(order_id)
         if order is None:
             raise NoDocumentsFoundHTTPException()
@@ -178,8 +180,11 @@ async def delete(
     order_service: OrderService = Depends(  # noqa: B008
         Provide[Container.order_service]
     ),
+    auth: HTTPAuthorizationCredentials = Depends(HTTPBearer()),  # noqa: B008
 ):
     try:
+        token = auth.credentials
+        await validate_token(token)
         was_order_deleted = order_service.delete_order(order_id)
 
         if was_order_deleted:
@@ -202,8 +207,11 @@ async def update(
     product_service: ProductService = Depends(  # noqa: B008
         Provide[Container.product_service]
     ),
+    auth: HTTPAuthorizationCredentials = Depends(HTTPBearer()),  # noqa: B008
 ) -> OrderV1Response:
     try:
+        token = auth.credentials
+        await validate_token(token)
         old_order = order_service.get_order_by_id(order_id)
         if old_order is None:
             raise NoDocumentsFoundException()
@@ -256,7 +264,10 @@ async def display_orders(
     user_service: UserService = Depends(  # noqa: B008
         Provide[Container.user_service]
     ),
+    auth: HTTPAuthorizationCredentials = Depends(HTTPBearer()),  # noqa: B008
 ) -> ListOrderV1Response:
+    token = auth.credentials
+    await validate_token(token)
     orders = order_service.list_orders_to_display(
         page=page, page_size=page_size
     )
