@@ -2,6 +2,7 @@ from unittest.mock import AsyncMock, patch
 
 import httpx
 import pytest
+from fastapi import HTTPException
 
 from external.authentication import validate_token
 
@@ -33,3 +34,17 @@ async def test_validate_token_error():
         result = await validate_token(token)
 
     assert result == "Invalid token"
+
+
+@pytest.mark.asyncio
+async def test_validate_token_error_exception():
+    token = "valid_token"
+
+    httpx.Response(500, json="Invalid token")
+
+    with patch("httpx.AsyncClient.get", new_callable=AsyncMock) as mock_get:
+        try:
+            mock_get.side_effect = Exception
+            await validate_token(token)
+        except HTTPException as ex:
+            assert ex.status_code == 500
