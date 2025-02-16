@@ -88,7 +88,7 @@ jobs:
           echo 'db_url = "${{ secrets.DB_URL }}"' > terraform.tfvars
 
       - name: Terraform Init
-        run: terraform init -backend-config="bucket=${BUCKET_TF_STATE}"
+        run: terraform init
         working-directory: ./terraform
         env:
           BUCKET_TF_STATE: ${{ secrets.AWS_BUCKET }}
