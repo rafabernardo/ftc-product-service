@@ -7,11 +7,11 @@ class Settings(BaseSettings):
     API_PORT: int
     ROOT_PATH: str = "/fiap-soad"
     MONGO_URI: str | None = None
-    MONGO_URL: str
-    MONGO_PORT: int
-    MONGO_USERNAME: str
-    MONGO_PASSWORD: str
-    MONGO_DATABASE: str
+    MONGO_URL: str | None = None
+    MONGO_PORT: int | None = None
+    MONGO_USERNAME: str | None = None
+    MONGO_PASSWORD: str | None = None
+    MONGO_DATABASE: str | None = None
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
