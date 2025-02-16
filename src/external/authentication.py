@@ -17,7 +17,6 @@ async def validate_token(token: str) -> dict:
                 validate_token_url,
                 headers={"Authorization": f"Bearer {token}"},
             )
-            response.raise_for_status()  # Raise an exception for HTTP errors
             return response.json()  # Return the validated token payload
         except httpx.HTTPStatusError as e:
             raise HTTPException(
