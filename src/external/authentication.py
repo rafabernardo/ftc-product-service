@@ -18,7 +18,7 @@ async def validate_token(token: str) -> dict:
                 headers={"Authorization": f"Bearer {token}"},
             )
             return response.json()  # Return the validated token payload
-        except httpx.HTTPStatusError as e:
+        except HTTPException as e:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Invalid token",

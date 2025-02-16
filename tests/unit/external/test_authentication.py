@@ -19,3 +19,17 @@ async def test_validate_token_success():
         result = await validate_token(token)
 
     assert result == expected_response
+
+
+@pytest.mark.asyncio
+async def test_validate_token_error():
+    token = "valid_token"
+
+    mock_response = httpx.Response(401, json="Invalid token")
+
+    with patch("httpx.AsyncClient.get", new_callable=AsyncMock) as mock_get:
+        mock_get.return_value = mock_response
+
+        result = await validate_token(token)
+
+    assert result == "Invalid token"
