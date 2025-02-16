@@ -12,6 +12,7 @@ class Settings(BaseSettings):
     MONGO_USERNAME: str | None = None
     MONGO_PASSWORD: str | None = None
     MONGO_DATABASE: str | None = None
+    AUTHENTICATION_URL: str
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 

@@ -1,4 +1,4 @@
-from unittest.mock import Mock
+from unittest.mock import Mock, patch
 
 import pytest
 from fastapi.testclient import TestClient
@@ -39,6 +39,14 @@ def setup(container):
     container.unwire()
 
 
+async def validate_token(
+    token: str,
+):
+    """Mock JWT verification, returning a fake decoded payload."""
+    return {"valid": True}
+
+
+@patch("api.v1.orders.validate_token", validate_token)
 def test_get_order_by_id(order_service_mock, user_service_mock, user_mock):
     user_service_mock.get_user_by_id.return_value = user_mock
 
@@ -69,7 +77,10 @@ def test_get_order_by_id(order_service_mock, user_service_mock, user_mock):
         waiting_time=3000,
     )
 
-    response = client.get("/orders/67a77edeaf970c68f41cc3d4")
+    response = client.get(
+        "/orders/67a77edeaf970c68f41cc3d4",
+        headers={"Authorization": "Bearer asda"},
+    )
     data = response.json()
 
     assert response.status_code == 200

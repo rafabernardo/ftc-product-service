@@ -3,6 +3,7 @@ from unittest.mock import Mock, patch
 import pytest
 from fastapi.testclient import TestClient
 
+from api.v1.models.product import ProductV1Request
 from api.v1.products import router
 from core.dependency_injection import Container
 from models.product import Product
@@ -39,30 +40,34 @@ async def validate_token(
 
 
 @patch("api.v1.products.validate_token", validate_token)
-def test_list_product(product_service_mock):
+def test_register_product(product_service_mock):
     # Arrange
 
-    expected_products = [
-        Product(
-            id="67a77edeaf970c68f41cc3d3",
-            name="Test Product",
-            price=1000,
-            description="Test description",
-            image="test-image.jpg",
-            created_at="2025-02-08T12:57:18.267Z",
-            updated_at="2025-02-08T12:57:18.267Z",
-            category="meal",
-        ),
-    ]
-    product_service_mock.list_products.return_value = expected_products
-    product_service_mock.count_products.return_value = 1
+    expected_products = Product(
+        id="67a77edeaf970c68f41cc3d3",
+        name="Test Product",
+        price=1000,
+        description="Test description",
+        image="test-image.jpg",
+        created_at="2025-02-08T12:57:18.267Z",
+        updated_at="2025-02-08T12:57:18.267Z",
+        category="meal",
+    )
 
-    response = client.get(
-        "/products/",
-        params={"category": "meal", "page": 1, "page_size": 10},
+    product_service_mock.register_product.return_value = expected_products
+    product_request = ProductV1Request(
+        name="Test Product",
+        price=1000,
+        description="Test description",
+        image="test-image.jpg",
+        category="meal",
+    )
+
+    response = client.post(
+        "/products",
+        json=product_request.model_dump(),
         headers={"Authorization": "Bearer asda"},
     )
 
-    assert response.status_code == 200
-    assert len(response.json()["results"]) == 1
-    product_service_mock.list_products.assert_called_once()
+    assert response.status_code == 201
+    product_service_mock.register_product.assert_called_once()

@@ -1,3 +1,3 @@
-output "ecr_repository_url" {
-  value = aws_ecr_repository.my_ecr_repo.repository_url
+output "product_ecr_repository_url" {
+  value = aws_ecr_repository.ecr_product_service.repository_url
 }

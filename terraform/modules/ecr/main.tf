@@ -1,5 +1,5 @@
-resource "aws_ecr_repository" "my_ecr_repo" {
-  name                 = "ecr-fiap-image"
+resource "aws_ecr_repository" "ecr_product_service" {
+  name                 = "ecr_product_service"
   image_tag_mutability = "MUTABLE"
 
   image_scanning_configuration {
