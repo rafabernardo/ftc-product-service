@@ -12,6 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       API_PORT: "000"
+      AUTHENTICATION_URL: "test.com"
     permissions:
       contents: write
       pull-requests: write
