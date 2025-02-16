@@ -1,7 +1,7 @@
 terraform {
   backend "s3" {
-    bucket = "ecr_product_service"
-    key    = "ecr_product_service/terraform.tfstate"
+    bucket = "ecr-product-service"
+    key    = "ecr-product-service/terraform.tfstate"
     region = "us-east-1"
   }
 
