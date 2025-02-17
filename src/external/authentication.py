@@ -8,8 +8,8 @@ settings = get_settings()
 
 async def validate_token(token: str) -> dict:
     # URL of the token validation endpoint in the other microservice
-    validate_token_url = settings.AUTHENTICATION_URL
-
+    validate_token_url = f"{settings.AUTHENTICATION_URL}/service/v1/login"
+    print(validate_token_url)
     # Make a request to the other microservice
     async with httpx.AsyncClient() as client:
         try:
