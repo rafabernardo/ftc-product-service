@@ -12,7 +12,11 @@ async def test_validate_token_success():
     token = "valid_token"
     expected_response = {"user_id": 123, "role": "admin"}
 
-    mock_response = httpx.Response(200, json=expected_response)
+    mock_response = httpx.Response(
+        status_code=200,
+        json=expected_response,
+        request=httpx.Request("GET", "test"),
+    )
 
     with patch("httpx.AsyncClient.get", new_callable=AsyncMock) as mock_get:
         mock_get.return_value = mock_response
@@ -26,14 +30,16 @@ async def test_validate_token_success():
 async def test_validate_token_error():
     token = "valid_token"
 
-    mock_response = httpx.Response(401, json="Invalid token")
+    mock_response = httpx.Response(
+        401,
+        json="Invalid token",
+        request=httpx.Request("GET", "test"),
+    )
 
     with patch("httpx.AsyncClient.get", new_callable=AsyncMock) as mock_get:
         mock_get.return_value = mock_response
-
-        result = await validate_token(token)
-
-    assert result == "Invalid token"
+        with pytest.raises(HTTPException, match="Invalid token"):
+            await validate_token(token)
 
 
 @pytest.mark.asyncio
