@@ -1,6 +1,7 @@
 from unittest.mock import Mock, patch
 
 import pytest
+from fastapi import HTTPException
 from fastapi.testclient import TestClient
 
 from api.v1.orders import router
@@ -90,3 +91,15 @@ def test_list_orders(order_service_mock, user_service_mock, user_mock):
     assert response.status_code == 200
     assert data["results"] is not None
     assert data["page"] is not None
+
+
+def test_list_orders_error_missing_token():
+    with pytest.raises(HTTPException, match="Not authenticated"):
+        client.get(
+            "/orders",
+            params={
+                "order_status": ["being_prepared"],
+                "page": 1,
+                "page_size": 5,
+            },
+        )
