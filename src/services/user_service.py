@@ -44,7 +44,7 @@ class UserService:
         return self.repository.get_by_cpf(clean_cpf)
 
     def get_user_by_id(self, user_id: str) -> User | None:
-        user = self.repository.get_by_id(user_id)
+        user = self.repository.get_by_id(entity_id=user_id)
         return user
 
     def delete_user(self, user_id: str) -> bool:

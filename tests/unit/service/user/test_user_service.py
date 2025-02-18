@@ -47,7 +47,7 @@ def test_get_user_by_id(user_service, mock_repository, user_mock):
     mock_repository.get_by_id.return_value = user_mock
     result = user_service.get_user_by_id(user_id)
     assert result == user_mock
-    mock_repository.get_by_id.assert_called_once_with(user_id)
+    mock_repository.get_by_id.assert_called_once_with(entity_id=user_id)
 
 
 def test_delete_user_existing(user_service, mock_repository, user_mock):
