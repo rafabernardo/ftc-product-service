@@ -1,6 +1,7 @@
 from unittest.mock import Mock, patch
 
 import pytest
+from fastapi import HTTPException
 from fastapi.testclient import TestClient
 
 from api.v1.exceptions.commons import (
@@ -95,3 +96,10 @@ def test_get_product_by_id_internal_server_error(product_service_mock):
 
         assert response.status_code == 500
         assert response.json() == {"detail": "Internal server error"}
+
+
+def test_get_product_by_id_missing_token():
+    with pytest.raises(HTTPException, match="Not authenticated"):
+        client.get(
+            "/products/67a77edeaf970c68f41cc3d3",
+        )
