@@ -5,7 +5,7 @@ settings = get_settings()
 
 
 def prepare_order_to_payment(order: Order) -> dict:
-    callback_url = f"http://{settings.API_URL}/v1/payments/{order.id}"
+    callback_url = f"{settings.API_URL}/v1/payments/{order.id}"
     print(f"callback_url | {callback_url}")
 
     return {
