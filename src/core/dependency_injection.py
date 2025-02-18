@@ -13,6 +13,7 @@ class Container(containers.DeclarativeContainer):
     wiring_config = containers.WiringConfiguration(
         modules=[
             "api.v1.orders",
+            "api.v1.payments",
             "api.v1.products",
             "api.v1.users",
         ]
