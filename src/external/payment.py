@@ -6,7 +6,7 @@ from core.settings import get_settings
 settings = get_settings()
 
 
-async def register_payment(token: str, payload: dict) -> dict:
+async def register_payment(payload: dict) -> dict:
     # URL of the token validation endpoint in the other microservice
     payment_url = f"http://{settings.PAYMENT_URL}/v1/payments/"
     print(f"payment_url | {payment_url}")
@@ -15,8 +15,7 @@ async def register_payment(token: str, payload: dict) -> dict:
     async with httpx.AsyncClient() as client:
         try:
             response = await client.post(
-                payment_url,
-                headers={"Authorization": f"Bearer {token}"},
+                url=payment_url,
                 json=payload,
             )
             response.raise_for_status()
