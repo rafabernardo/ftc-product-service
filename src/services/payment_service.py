@@ -9,9 +9,6 @@ settings = get_settings()
 
 
 class PaymentService:
-    def __init__(self):
-        self.payment_endpoint = f"http://{settings.PAYMENT_URL}/v1/payments/"
-
-    def register_payment(self, order: Order) -> Order:
+    async def register_payment(self, order: Order) -> Order:
         payment_data = prepare_order_to_payment(order)
-        register_payment(token="", payload=payment_data)
+        await register_payment(token="", payload=payment_data)
