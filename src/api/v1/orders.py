@@ -171,7 +171,7 @@ async def register(
         )
 
         created_order = order_service.register_order(order)
-        PaymentService().register_payment(created_order)
+        await PaymentService().register_payment(created_order)
     except NoDocumentsFoundException as exc:
         raise NoDocumentsFoundHTTPException(exc.message) from exc
     except Exception as exc:

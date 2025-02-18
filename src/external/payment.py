@@ -9,6 +9,7 @@ settings = get_settings()
 async def register_payment(token: str, payload: dict) -> dict:
     # URL of the token validation endpoint in the other microservice
     payment_url = f"http://{settings.PAYMENT_URL}/v1/payments/"
+    print(f"payment_url | {payment_url}")
 
     # Make a request to the other microservice
     async with httpx.AsyncClient() as client:
