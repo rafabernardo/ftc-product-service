@@ -1,3 +1,5 @@
+import traceback
+
 from dependency_injector.wiring import Provide, inject
 from fastapi import APIRouter, Depends, Query, Response, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
@@ -83,6 +85,7 @@ async def list_orders(
         )
         return paginated_orders
     except Exception as exc:
+        print(traceback.format_exc())
         raise InternalServerErrorHTTPException() from exc
 
 

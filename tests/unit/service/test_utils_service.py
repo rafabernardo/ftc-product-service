@@ -1,4 +1,4 @@
-from datetime import UTC, datetime, timedelta
+from datetime import datetime, timedelta
 
 from freezegun import freeze_time
 
@@ -13,7 +13,7 @@ def test_clean_cpf_to_db():
 
 def test_get_seconds_diff():
     with freeze_time("2023-10-01 12:00:00"):
-        frozen_now = datetime.now(tz=UTC)
+        frozen_now = datetime.now()
 
         dt1 = frozen_now
         assert get_seconds_diff(dt1) == 0.0  # No difference in time

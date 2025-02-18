@@ -22,11 +22,11 @@ def test_count_orders(order_service, mock_repository):
     mock_repository.count_entities.return_value = 5
     order_filter = OrderFilter()
 
-    result = order_service.count_orders(order_filter)
+    result = order_service.count_orders(order_filter=order_filter)
 
     assert result == 5
     mock_repository.count_entities.assert_called_once_with(
-        order_filter=order_filter
+        filter_params=order_filter
     )
 
 

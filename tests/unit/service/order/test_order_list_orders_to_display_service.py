@@ -32,7 +32,7 @@ def order():
         id="67a77edeaf970c68f41cc3d4",
         order_number="12345",
         status=Status.ready.value,
-        paid_at="2025-02-08T12:57:18.267+00:00",
+        paid_at="2025-02-08T12:57:18.267",
         payment_status="paid",
         total_price=10,
         products=[
@@ -59,7 +59,7 @@ def order_second():
         id="67a77edeaf970c68f41cc3d4",
         order_number="12345",
         status=Status.being_prepared.value,
-        paid_at="2025-02-08T12:57:18.267+00:00",
+        paid_at="2025-02-08T12:57:18.267",
         payment_status="paid",
         total_price=10,
         products=[
