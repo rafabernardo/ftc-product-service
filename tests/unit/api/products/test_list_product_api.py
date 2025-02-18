@@ -1,6 +1,7 @@
 from unittest.mock import Mock, patch
 
 import pytest
+from fastapi import HTTPException
 from fastapi.testclient import TestClient
 
 from api.v1.products import router
@@ -66,3 +67,11 @@ def test_list_product(product_service_mock):
     assert response.status_code == 200
     assert len(response.json()["results"]) == 1
     product_service_mock.list_products.assert_called_once()
+
+
+def test_get_product_by_id_internal_server_error():
+    with pytest.raises(HTTPException, match="Not authenticated"):
+        client.get(
+            "/products/",
+            params={"category": "meal", "page": 1, "page_size": 10},
+        )
