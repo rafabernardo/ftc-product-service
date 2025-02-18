@@ -1,6 +1,7 @@
 from unittest.mock import Mock, patch
 
 import pytest
+from fastapi import HTTPException
 from fastapi.testclient import TestClient
 
 from api.v1.orders import router
@@ -85,3 +86,10 @@ def test_get_order_by_id(order_service_mock, user_service_mock, user_mock):
 
     assert response.status_code == 200
     assert data["id"] == "67a77edeaf970c68f41cc3d4"
+
+
+def test_get_order_by_id_missing_token():
+    with pytest.raises(HTTPException, match="Not authenticated"):
+        client.get(
+            "/orders/67a77edeaf970c68f41cc3d4",
+        )
