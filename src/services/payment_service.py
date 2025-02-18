@@ -11,4 +11,4 @@ settings = get_settings()
 class PaymentService:
     async def register_payment(self, order: Order) -> Order:
         payment_data = prepare_order_to_payment(order)
-        await register_payment(token="", payload=payment_data)
+        await register_payment(payload=payment_data)
