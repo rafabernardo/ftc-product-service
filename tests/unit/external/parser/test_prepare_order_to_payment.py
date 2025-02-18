@@ -11,7 +11,7 @@ settings = get_settings()
 @pytest.fixture
 def mock_env():
     aux_env = settings.API_URL
-    settings.API_URL = "my_api_url.com"
+    settings.API_URL = "http://my_api_url.com"
     yield
     settings.API_URL = aux_env
 

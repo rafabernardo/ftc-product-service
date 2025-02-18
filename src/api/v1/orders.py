@@ -16,6 +16,7 @@ from api.v1.models.order import (
     RegisterOrderV1Request,
     RegisterOrderV1Response,
 )
+from api.v1.models.user import UserV1Response
 from core.dependency_injection import Container
 from core.exceptions.commons_exceptions import NoDocumentsFoundException
 from external.authentication import validate_token
@@ -180,7 +181,9 @@ async def register(
     response.status_code = status.HTTP_201_CREATED
     response.headers[HEADER_CONTENT_TYPE] = HEADER_CONTENT_TYPE_APPLICATION_JSON
 
-    return created_order
+    return OrderV1Response(
+        **created_order.model_dump(), owner=UserV1Response(**user.model_dump())
+    )
 
 
 @router.delete("/{order_id}")
