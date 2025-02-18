@@ -6,6 +6,7 @@ Repositorio de microservico de pedidos e gerenciamento do produto para projeto d
 
 Resultado do coverage
 ![Coverage Result](/docs/image.png)
+![Sonar Result](/docs/Screenshot%202025-02-18%20at%2012.35.25.png)
 
 ## Configuração do Ambiente
 
