@@ -5,6 +5,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     API_PORT: int
+    API_URL: str | None = None
     ROOT_PATH: str = "/fiap-soad"
     MONGO_URI: str | None = None
     MONGO_URL: str | None = None
@@ -13,6 +14,7 @@ class Settings(BaseSettings):
     MONGO_PASSWORD: str | None = None
     MONGO_DATABASE: str | None = None
     AUTHENTICATION_URL: str
+    PAYMENT_URL: str | None = None
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 

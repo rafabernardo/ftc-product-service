@@ -22,6 +22,7 @@ from external.authentication import validate_token
 from models.order import OrderFilter, Status
 from repositories.utils import clean_up_dict, get_pagination_info
 from services.order_service import OrderService
+from services.payment_service import PaymentService
 from services.product_service import ProductService
 from services.user_service import UserService
 
@@ -170,6 +171,7 @@ async def register(
         )
 
         created_order = order_service.register_order(order)
+        PaymentService().register_payment(created_order)
     except NoDocumentsFoundException as exc:
         raise NoDocumentsFoundHTTPException(exc.message) from exc
     except Exception as exc:
